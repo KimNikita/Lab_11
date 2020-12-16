@@ -32,6 +32,11 @@ int TNum::GetNumber()
   return data;
 }
 
+char TNum::GetOperation()
+{
+  throw - 1;
+}
+
 TOperand* TNum::Calc(TOperand* a, TOperand* b)
 {
   throw - 1;
@@ -45,6 +50,11 @@ TOperation::TOperation(char _d)
 TOperation::TOperation(TOperation& _v)
 {
   this->data = _v.data;
+}
+
+char TOperation::GetOperation()
+{
+  return data;
 }
 
 int TOperation::GetNumber()
@@ -189,6 +199,7 @@ TOperand** TOperandFactory::Create(char* s, int& n)
         case '-':res[j] = new TSub('-'); break;
         case '*':res[j] = new TMult('*'); break;
         case '/':res[j] = new TDiv('/'); break;
+        case '^':res[j] = new TPow('^'); break;
         }
         j++;
         start = i + 1;
@@ -297,4 +308,43 @@ int TPolish::Calculate(char* s)
   delete[] operands;
   delete[] res;
   return r->GetNumber();
+}
+
+//доп задания
+
+void TPolish::WriteToFile(string name, char* s)
+{
+  ofstream fout(name.c_str());
+  int n = 0;
+  TOperand** res = TOperandFactory::Create(s, n);
+  for (int i = 0; i < n; i++)
+    if (res[i]->Priority() == -1)
+      fout << res[i]->GetNumber();
+    else
+      fout << res[i]->GetOperation();
+  fout.close();
+}
+
+TPow::TPow(char _d) :TOperation(_d)
+{
+}
+
+int TPow::Priority()
+{
+  return 4;
+}
+
+TOperand* TPow::Calc(TOperand* a, TOperand* b)
+{
+  if (b->GetNumber() == 0)
+  {
+    TNum* res = new TNum(1);
+    return res;
+  }
+  int pow = a->GetNumber();
+  int sum = pow;
+  for (int i = 1; i < b->GetNumber(); i++)
+    sum *= pow;
+  TNum* res = new TNum(sum);
+  return res;
 }

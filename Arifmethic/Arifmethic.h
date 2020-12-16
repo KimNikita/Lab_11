@@ -12,6 +12,7 @@ protected:
 public:
   virtual int Priority() = 0;
   virtual int GetNumber() = 0;
+  virtual char GetOperation() = 0;
   virtual TOperand* Calc(TOperand* a, TOperand* b) = 0;
 };
 
@@ -25,6 +26,7 @@ public:
   TNum(char* s);
   virtual int Priority();
   virtual int GetNumber();
+  virtual char GetOperation();
   virtual TOperand* Calc(TOperand* a, TOperand* b);
 };
 
@@ -36,6 +38,8 @@ public:
   TOperation(char _d);
   TOperation(TOperation& _v);
   virtual int GetNumber();
+  virtual char GetOperation();
+  friend ofstream& operator<<(ofstream& ofstr, TOperand& O);
 };
 
 class TPlus : public TOperation
@@ -108,4 +112,20 @@ class TPolish
 {
 public:
   static int Calculate(char* s);
+
+  //доп задания
+
+  void WriteToFile(string name, char* s);
+};
+
+//доп задания
+
+class TPow : public TOperation
+{
+protected:
+
+public:
+  TPow(char _d);
+  virtual int Priority();
+  virtual TOperand* Calc(TOperand* a, TOperand* b);
 };
