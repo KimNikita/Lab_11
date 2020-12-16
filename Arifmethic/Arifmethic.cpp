@@ -1,7 +1,6 @@
 #include <math.h>
 
 #include "Arifmethic.h"
-#include <ctype.h>
 
 TNum::TNum(int _d)
 {

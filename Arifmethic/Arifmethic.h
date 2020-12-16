@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string.h>
+#include <ctype.h>
+#include <cstdlib>
 #include "Stack.h"
 
 class TOperand
